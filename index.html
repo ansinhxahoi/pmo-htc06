@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,40 +8,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+    <script>
+        // Module 1: Cấu hình Tailwind & Trí nhớ trình duyệt
+        tailwind.config = { darkMode: 'class' };
+        if (localStorage.theme === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
     <style>
         body {
             font-family: 'Be Vietnam Pro', sans-serif;
-            background-color: #050505;
-            background-image: 
-                radial-gradient(circle at 50% -20px, rgba(6, 182, 212, 0.15) 0%, transparent 60%),
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
             background-attachment: fixed;
-            color: #d4d4d8;
-        }
-        
-        /* Đã Audit DNA: Trả lại Border Cyan-900/40 và Glow #06b6d4 */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.015);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(22, 78, 99, 0.4); 
-            transition: all 0.3s ease;
-        }
-        .glass-card:hover {
-            border-color: rgba(6, 182, 212, 0.5);
-            box-shadow: 0 0 60px rgba(6, 182, 212, 0.35);
+            transition: background-color 0.3s, color 0.3s;
         }
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Đã Audit DNA: Gradient cyan-400 -> blue-500 */
         .text-gradient {
             background: linear-gradient(135deg, #22d3ee, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* KIẾN TRÚC 3D HOLOGRAM CHO KANBAN */
+        /* --- KIẾN TRÚC 3D HOLOGRAM CHO KANBAN --- */
         .holo-scene {
             perspective: 1500px; 
             transform-style: preserve-3d;
@@ -50,21 +43,34 @@
             transform-style: preserve-3d;
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        /* Bẻ cong các cột tạo hình bán nguyệt CHỈ trên Desktop (Mobile giữ nguyên xếp dọc) */
         @media (min-width: 1024px) {
             .holo-col-1 { transform: rotateY(12deg) translateZ(-50px) translateX(20px); }
             .holo-col-2 { transform: rotateY(4deg) translateZ(0px); }
             .holo-col-3 { transform: rotateY(-4deg) translateZ(0px); }
             .holo-col-4 { transform: rotateY(-12deg) translateZ(-50px) translateX(-20px); }
-            
-            .holo-col:hover {
-                transform: translateZ(30px) rotateY(0deg) !important; 
-                z-index: 10;
-            }
+            .holo-col:hover { transform: translateZ(30px) rotateY(0deg) !important; z-index: 10; }
         }
 
-        .task-card {
+        /* ================== THEME SÁNG/TỐI ================== */
+        /* --- DARK MODE (Bản gốc DNA) --- */
+        html.dark body {
+            background-color: #050505;
+            background-image: 
+                radial-gradient(circle at 50% -20px, rgba(6, 182, 212, 0.15) 0%, transparent 60%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            color: #d4d4d8;
+        }
+        html.dark .glass-card {
+            background: rgba(255, 255, 255, 0.015);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(22, 78, 99, 0.4); 
+            transition: all 0.3s ease;
+        }
+        html.dark .glass-card:hover {
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 0 60px rgba(6, 182, 212, 0.35);
+        }
+        html.dark .task-card {
             background: linear-gradient(180deg, rgba(6,182,212,0.05) 0%, rgba(0,0,0,0.8) 100%);
             border: 1px solid rgba(6, 182, 212, 0.2);
             box-shadow: inset 0 0 15px rgba(6,182,212,0.05);
@@ -72,48 +78,99 @@
             transform: translateZ(0);
             transition: all 0.3s;
         }
-        .task-card:hover {
+        html.dark .task-card:hover {
             border-color: rgba(6, 182, 212, 0.6);
             box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.4), inset 0 0 20px rgba(6,182,212,0.1);
             transform: translateZ(20px);
         }
-
-        .task-critical {
+        html.dark .task-critical {
             background: linear-gradient(180deg, rgba(244,63,94,0.08) 0%, rgba(0,0,0,0.9) 100%);
             border-color: rgba(244, 63, 94, 0.4);
             box-shadow: 0 0 20px rgba(244, 63, 94, 0.15), inset 0 0 15px rgba(244,63,94,0.1);
         }
-        .task-critical:hover {
+        html.dark .task-critical:hover {
             border-color: rgba(244, 63, 94, 0.8);
             box-shadow: 0 15px 40px -10px rgba(244, 63, 94, 0.5), inset 0 0 30px rgba(244,63,94,0.2);
+        }
+
+        /* --- LIGHT MODE (Theme Mới) --- */
+        html:not(.dark) body {
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(circle at 50% -20px, rgba(6, 182, 212, 0.08) 0%, transparent 60%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+            color: #334155;
+        }
+        html:not(.dark) .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(148, 163, 184, 0.3); 
+            transition: all 0.3s ease;
+        }
+        html:not(.dark) .glass-card:hover {
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 10px 40px rgba(6, 182, 212, 0.1);
+        }
+        html:not(.dark) .task-card {
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(248,250,252,1) 100%);
+            border: 1px solid rgba(203, 213, 225, 0.6);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            position: relative;
+            transform: translateZ(0);
+            transition: all 0.3s;
+        }
+        html:not(.dark) .task-card:hover {
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 10px 20px -5px rgba(6, 182, 212, 0.15);
+            transform: translateZ(20px);
+        }
+        html:not(.dark) .task-critical {
+            background: linear-gradient(180deg, rgba(255,241,242,1) 0%, rgba(255,255,255,1) 100%);
+            border-color: rgba(244, 63, 94, 0.4);
+            box-shadow: 0 2px 5px rgba(244, 63, 94, 0.05);
+        }
+        html:not(.dark) .task-critical:hover {
+            border-color: rgba(244, 63, 94, 0.6);
+            box-shadow: 0 10px 20px -5px rgba(244, 63, 94, 0.15);
         }
 
         .tab-hidden { display: none !important; }
     </style>
 </head>
-<body class="h-[100dvh] w-screen overflow-hidden flex flex-col">
+<body class="h-[100dvh] w-screen overflow-hidden flex flex-col transition-colors duration-300">
 
-    <nav class="flex-none z-50 bg-[#050505]/90 backdrop-blur-2xl border-b border-cyan-900/40">
+    <nav class="flex-none z-50 bg-white/90 dark:bg-[#050505]/90 backdrop-blur-2xl border-b border-slate-200 dark:border-cyan-900/40 transition-colors">
         <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="h-14 sm:h-20 flex items-center justify-between border-b border-white/5">
+            <div class="h-14 sm:h-20 flex items-center justify-between border-b border-slate-200 dark:border-white/5">
                 <div class="flex items-center gap-3">
                     <div class="w-7 h-7 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.4)]">
-                        <svg class="w-4 h-4 sm:w-6 sm:h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <svg class="w-4 h-4 sm:w-6 sm:h-6 text-white dark:text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
                     <div>
-                        <span class="font-black text-white tracking-tighter uppercase text-sm sm:text-xl block leading-none">HTC <span class="text-zinc-600 font-medium">| 06</span></span>
-                        <span class="hidden sm:block text-[10px] text-cyan-500 font-bold uppercase tracking-widest mt-1">PMO Platform</span>
+                        <span class="font-black text-slate-900 dark:text-white tracking-tighter uppercase text-sm sm:text-xl block leading-none transition-colors">HTC <span class="text-slate-400 dark:text-zinc-600 font-medium">| 06</span></span>
+                        <span class="hidden sm:block text-[10px] text-cyan-600 dark:text-cyan-500 font-bold uppercase tracking-widest mt-1">PMO Platform</span>
                     </div>
                 </div>
-                <button onclick="refreshData()" id="syncBtn" class="bg-cyan-500 hover:bg-cyan-400 text-black text-[9px] sm:text-[11px] font-black px-4 py-2 sm:px-6 sm:py-3 rounded-full transition-all uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
-                    <span id="syncIcon">🔄</span> <span class="hidden sm:inline">LIVE SYNC</span><span class="sm:hidden">SYNC DB</span>
-                </button>
+                
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <!-- Module 3: Nút Toggle Theme -->
+                    <button onclick="toggleTheme()" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-100 dark:bg-cyan-900/20 border border-slate-300 dark:border-cyan-500/30 flex items-center justify-center text-slate-600 dark:text-cyan-400 transition-all hover:scale-110 shadow-sm">
+                        <!-- Sun Icon -->
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <!-- Moon Icon -->
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+
+                    <button onclick="refreshData()" id="syncBtn" class="bg-cyan-500 hover:bg-cyan-400 text-white dark:text-black text-[9px] sm:text-[11px] font-black px-4 py-2 sm:px-6 sm:py-3 rounded-full transition-all uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                        <span id="syncIcon">🔄</span> <span class="hidden sm:inline">LIVE SYNC</span><span class="sm:hidden">SYNC DB</span>
+                    </button>
+                </div>
             </div>
             
             <div class="flex overflow-x-auto no-scrollbar gap-8 sm:gap-12 pt-4 pb-0 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em]">
-                <button onclick="switchView('WBS')" id="tabWBS" class="text-cyan-400 border-b-[3px] border-cyan-400 pb-3 flex-shrink-0 transition-all">Operations</button>
-                <button onclick="switchView('TECH')" id="tabTECH" class="text-zinc-500 hover:text-white pb-3 border-b-[3px] border-transparent transition-all flex-shrink-0">Assets</button>
-                <button onclick="switchView('CHART')" id="tabCHART" class="text-zinc-500 hover:text-white pb-3 border-b-[3px] border-transparent transition-all flex-shrink-0">Dashboard</button>
+                <button onclick="switchView('WBS')" id="tabWBS" class="text-cyan-600 dark:text-cyan-400 border-b-[3px] border-cyan-500 dark:border-cyan-400 pb-3 flex-shrink-0 transition-all">Operations</button>
+                <button onclick="switchView('TECH')" id="tabTECH" class="text-slate-400 dark:text-zinc-500 hover:text-slate-800 dark:hover:text-white pb-3 border-b-[3px] border-transparent transition-all flex-shrink-0">Assets</button>
+                <button onclick="switchView('CHART')" id="tabCHART" class="text-slate-400 dark:text-zinc-500 hover:text-slate-800 dark:hover:text-white pb-3 border-b-[3px] border-transparent transition-all flex-shrink-0">Dashboard</button>
             </div>
         </div>
     </nav>
@@ -121,34 +178,32 @@
     <main class="flex-1 w-full max-w-[1600px] mx-auto p-4 sm:p-6 lg:p-8 flex flex-col min-h-0 relative">
         
         <div id="viewWBS" class="flex-1 flex flex-col min-h-0 glass-card rounded-[24px] sm:rounded-[32px] overflow-hidden w-full">
-            <div class="flex-none p-4 sm:p-6 lg:p-8 border-b border-cyan-900/40 flex justify-between items-center bg-white/[0.01]">
+            <div class="flex-none p-4 sm:p-6 lg:p-8 border-b border-slate-200 dark:border-cyan-900/40 flex justify-between items-center bg-slate-50 dark:bg-white/[0.01]">
                 <div>
-                    <h2 class="font-black text-white text-base sm:text-xl tracking-widest uppercase">WBS</h2>
-                    <p class="hidden sm:block text-[11px] text-zinc-500 mt-1 uppercase tracking-widest">Bảng phân cấp công việc</p>
+                    <h2 class="font-black text-slate-800 dark:text-white text-base sm:text-xl tracking-widest uppercase transition-colors">WBS</h2>
+                    <p class="hidden sm:block text-[11px] text-slate-500 dark:text-zinc-500 mt-1 uppercase tracking-widest transition-colors">Bảng phân cấp công việc</p>
                 </div>
-                <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[9px] sm:text-[10px] font-black rounded-full uppercase">Real-time DB</span>
+                <span class="px-3 py-1 bg-cyan-100 dark:bg-cyan-500/10 border border-cyan-300 dark:border-cyan-500/20 text-cyan-600 dark:text-cyan-400 text-[9px] sm:text-[10px] font-black rounded-full uppercase">Real-time DB</span>
             </div>
             
             <div class="flex-1 overflow-y-auto no-scrollbar relative p-2 sm:p-6 lg:p-8">
                 <div class="hidden xl:block">
                     <table class="w-full text-left text-sm">
                         <thead>
-                            <thead>
-                            <tr class="text-zinc-500 border-b border-cyan-900/40 uppercase text-[10px] font-black tracking-[0.2em]">
-                                <th class="pb-4 pr-6 sticky top-0 bg-[#050505]/95 backdrop-blur z-10 w-[80px]">Mã</th>
-                                <th class="pb-4 pr-6 sticky top-0 bg-[#050505]/95 backdrop-blur z-10 w-[280px]">Hạng mục</th>
-                                <th class="pb-4 pr-6 sticky top-0 bg-[#050505]/95 backdrop-blur z-10 min-w-[250px]">Mục tiêu</th>
-                                <th class="pb-4 pr-6 sticky top-0 bg-[#050505]/95 backdrop-blur z-10 w-[140px]">Tiến độ</th>
-                                <th class="pb-4 text-center sticky top-0 bg-[#050505]/95 backdrop-blur z-10 text-cyan-500 w-[70px]">R</th>
-                                <th class="pb-4 text-center sticky top-0 bg-[#050505]/95 backdrop-blur z-10 text-amber-500 w-[70px]">A</th>
-                                <th class="pb-4 text-center sticky top-0 bg-[#050505]/95 backdrop-blur z-10 text-rose-500 w-[70px]">C</th>
-                                <th class="pb-4 text-center sticky top-0 bg-[#050505]/95 backdrop-blur z-10 text-emerald-500 w-[70px]">I</th>
-                                <th class="pb-4 text-center sticky top-0 bg-[#050505]/95 backdrop-blur z-10 text-blue-400 w-[120px]">Link Assets</th>
+                            <tr class="text-slate-500 dark:text-zinc-500 border-b border-slate-200 dark:border-cyan-900/40 uppercase text-[10px] font-black tracking-[0.2em] transition-colors">
+                                <th class="pb-4 pr-6 sticky top-0 bg-[#f8fafc]/95 dark:bg-[#050505]/95 backdrop-blur z-10 w-[80px]">Mã</th>
+                                <th class="pb-4 pr-6 sticky top-0 bg-[#f8fafc]/95 dark:bg-[#050505]/95 backdrop-blur z-10 w-[280px]">Hạng mục</th>
+                                <th class="pb-4 pr-6 sticky top-0 bg-[#f8fafc]/95 dark:bg-[#050505]/95 backdrop-blur z-10 min-w-[250px]">Mục tiêu</th>
+                                <th class="pb-4 pr-6 sticky top-0 bg-[#f8fafc]/95 dark:bg-[#050505]/95 backdrop-blur z-10 w-[140px]">Tiến độ</th>
+                                <th class="pb-4 text-center sticky top-0 bg-[#f8fafc]/95 dark:bg-[#050505]/95 backdrop-blur z-10 text-cyan-600 dark:text-cyan-500 w-[70px]">R</th>
+                                <th class="pb-4 text-center sticky top-0 bg-[#f8fafc]/95 dark:bg-[#050505]/95 backdrop-blur z-10 text-amber-500 w-[70px]">A</th>
+                                <th class="pb-4 text-center sticky top-0 bg-[#f8fafc]/95 dark:bg-[#050505]/95 backdrop-blur z-10 text-rose-500 w-[70px]">C</th>
+                                <th class="pb-4 text-center sticky top-0 bg-[#f8fafc]/95 dark:bg-[#050505]/95 backdrop-blur z-10 text-emerald-500 w-[70px]">I</th>
+                                <th class="pb-4 text-center sticky top-0 bg-[#f8fafc]/95 dark:bg-[#050505]/95 backdrop-blur z-10 text-blue-500 dark:text-blue-400 w-[120px]">Link Assets</th>
                             </tr>
                         </thead>
-                        </thead>
                         <tbody id="wbsTableBodyDesktop">
-                            <tr><td colspan="10" class="py-20 text-center text-zinc-600 italic tracking-[0.3em] uppercase text-[10px] animate-pulse">HTC-BAN06</td></tr>
+                            <tr><td colspan="10" class="py-20 text-center text-slate-400 dark:text-zinc-600 italic tracking-[0.3em] uppercase text-[10px] animate-pulse">HTC-BAN06</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -159,9 +214,9 @@
         </div>
 
         <div id="viewTECH" class="tab-hidden flex-1 flex flex-col min-h-0 glass-card rounded-[24px] sm:rounded-[32px] overflow-hidden w-full">
-            <div class="flex-none p-4 sm:p-6 lg:p-8 border-b border-cyan-900/40 bg-white/[0.01]">
-                <h2 class="font-black text-white text-base sm:text-xl tracking-widest uppercase italic border-l-4 border-cyan-500 pl-4">Quản trị Tài sản Công nghệ</h2>
-                <p class="hidden sm:block text-[11px] text-zinc-500 mt-2 uppercase tracking-widest ml-5">TECH</p>
+            <div class="flex-none p-4 sm:p-6 lg:p-8 border-b border-slate-200 dark:border-cyan-900/40 bg-slate-50 dark:bg-white/[0.01]">
+                <h2 class="font-black text-slate-800 dark:text-white text-base sm:text-xl tracking-widest uppercase italic border-l-4 border-cyan-500 pl-4 transition-colors">Quản trị Tài sản Công nghệ</h2>
+                <p class="hidden sm:block text-[11px] text-slate-500 dark:text-zinc-500 mt-2 uppercase tracking-widest ml-5 transition-colors">TECH</p>
             </div>
             <div class="flex-1 overflow-y-auto no-scrollbar p-4 sm:p-6 lg:p-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 auto-rows-max" id="techContainer">
             </div>
@@ -171,31 +226,31 @@
             
             <div class="glass-card rounded-[24px] sm:rounded-[32px] p-4 sm:p-6 lg:w-1/4 xl:w-1/5 flex flex-col min-h-[120px] lg:min-h-0 flex-none">
                 <h2 class="font-black text-gradient text-sm sm:text-base tracking-widest uppercase italic border-l-4 border-cyan-500 pl-3 mb-3">Roadmap</h2>
-                <p class="text-[9px] text-zinc-500 uppercase tracking-widest mb-4 hidden lg:block">Overview</p>
+                <p class="text-[9px] text-slate-400 dark:text-zinc-500 uppercase tracking-widest mb-4 hidden lg:block transition-colors">Overview</p>
                 
                 <div id="roadmapContainer" class="flex-1 overflow-auto flex lg:flex-col gap-3 no-scrollbar pb-2 lg:pb-0 lg:pr-2">
-                    <div class="py-5 text-center text-zinc-600 italic tracking-[0.2em] uppercase text-[10px] animate-pulse w-full">Đang đồng bộ...</div>
+                    <div class="py-5 text-center text-slate-400 dark:text-zinc-600 italic tracking-[0.2em] uppercase text-[10px] animate-pulse w-full">Đang đồng bộ...</div>
                 </div>
             </div>
 
             <div class="glass-card rounded-[24px] sm:rounded-[32px] p-4 sm:p-6 lg:w-3/4 xl:w-4/5 flex flex-col min-h-0 flex-1 relative overflow-hidden">
                 
-                <div class="flex-none mb-6 border-b border-cyan-900/40 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 z-10">
+                <div class="flex-none mb-6 border-b border-slate-200 dark:border-cyan-900/40 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 z-10 transition-colors">
                     <div>
-                        <h2 class="font-black text-white text-lg sm:text-2xl tracking-widest uppercase flex items-center gap-3">
-                            <span class="text-cyan-400">DASHBOARD:</span> <span id="currentWeekLabel">...</span>
+                        <h2 class="font-black text-slate-800 dark:text-white text-lg sm:text-2xl tracking-widest uppercase flex items-center gap-3 transition-colors">
+                            <span class="text-cyan-600 dark:text-cyan-400">DASHBOARD:</span> <span id="currentWeekLabel">...</span>
                         </h2>
-                        <p class="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">Agile Kanban & PRINCE2</p>
+                        <p class="text-[10px] text-slate-500 dark:text-zinc-500 uppercase tracking-widest mt-1 transition-colors">Agile Kanban & PRINCE2</p>
                     </div>
                     <div class="flex gap-4 w-full sm:w-auto">
-                        <div class="flex-1 sm:flex-none bg-[#050505] border border-cyan-900/40 rounded-xl px-4 py-2 text-center shadow-[inset_0_0_10px_rgba(6,182,212,0.1)]">
-                            <p class="text-[8px] text-zinc-500 uppercase font-black tracking-widest mb-1">Nhiệm vụ</p>
-                            <p class="text-xl font-black text-cyan-400" id="totalTasksCount">0</p>
+                        <div class="flex-1 sm:flex-none bg-white dark:bg-[#050505] border border-slate-200 dark:border-cyan-900/40 rounded-xl px-4 py-2 text-center shadow-[inset_0_0_10px_rgba(6,182,212,0.05)] dark:shadow-[inset_0_0_10px_rgba(6,182,212,0.1)] transition-colors">
+                            <p class="text-[8px] text-slate-500 dark:text-zinc-500 uppercase font-black tracking-widest mb-1 transition-colors">Nhiệm vụ</p>
+                            <p class="text-xl font-black text-cyan-600 dark:text-cyan-400" id="totalTasksCount">0</p>
                         </div>
-                        <div class="flex-1 sm:flex-none bg-[#050505] border border-rose-900/40 rounded-xl px-4 py-2 text-center shadow-[inset_0_0_15px_rgba(244,63,94,0.15)] relative overflow-hidden">
-                            <div class="absolute inset-0 bg-rose-500/10 animate-pulse"></div>
+                        <div class="flex-1 sm:flex-none bg-white dark:bg-[#050505] border border-rose-200 dark:border-rose-900/40 rounded-xl px-4 py-2 text-center shadow-[inset_0_0_15px_rgba(244,63,94,0.05)] dark:shadow-[inset_0_0_15px_rgba(244,63,94,0.15)] relative overflow-hidden transition-colors">
+                            <div class="absolute inset-0 bg-rose-50 dark:bg-rose-500/10 animate-pulse"></div>
                             <p class="text-[8px] text-rose-500 uppercase font-black tracking-widest mb-1 relative z-10">Điểm nghẽn</p>
-                            <p class="text-xl font-black text-rose-400 relative z-10" id="riskCount">0</p>
+                            <p class="text-xl font-black text-rose-500 dark:text-rose-400 relative z-10" id="riskCount">0</p>
                         </div>
                     </div>
                 </div>
@@ -204,33 +259,33 @@
                     <div class="flex flex-col lg:flex-row flex-nowrap gap-6 lg:gap-8 min-h-max lg:h-full lg:min-w-0" id="kanbanBoard">
                         
                         <div class="w-full lg:w-1/4 flex flex-col min-h-[350px] lg:h-full holo-col holo-col-1">
-                            <div class="bg-cyan-900/20 border-t-2 border-cyan-400 rounded-t-2xl p-3 mb-2 text-center backdrop-blur-md sticky top-0 z-20">
-                                <h3 class="text-xs font-black text-white uppercase tracking-widest">To Do</h3>
-                                <p class="text-[9px] text-cyan-400 font-bold uppercase mt-1" id="count-todo">0 Tasks</p>
+                            <div class="bg-cyan-50 dark:bg-cyan-900/20 border-t-2 border-cyan-400 rounded-t-2xl p-3 mb-2 text-center backdrop-blur-md sticky top-0 z-20 transition-colors">
+                                <h3 class="text-xs font-black text-slate-800 dark:text-white uppercase tracking-widest">To Do</h3>
+                                <p class="text-[9px] text-cyan-600 dark:text-cyan-400 font-bold uppercase mt-1" id="count-todo">0 Tasks</p>
                             </div>
                             <div class="flex-1 overflow-y-auto no-scrollbar flex flex-col gap-3 pb-6 lg:pb-10" id="col-todo"></div>
                         </div>
 
                         <div class="w-full lg:w-1/4 flex flex-col min-h-[350px] lg:h-full holo-col holo-col-2">
-                            <div class="bg-amber-900/20 border-t-2 border-amber-400 rounded-t-2xl p-3 mb-2 text-center backdrop-blur-md sticky top-0 z-20">
-                                <h3 class="text-xs font-black text-white uppercase tracking-widest">Doing</h3>
-                                <p class="text-[9px] text-amber-400 font-bold uppercase mt-1" id="count-doing">0 Tasks</p>
+                            <div class="bg-amber-50 dark:bg-amber-900/20 border-t-2 border-amber-400 rounded-t-2xl p-3 mb-2 text-center backdrop-blur-md sticky top-0 z-20 transition-colors">
+                                <h3 class="text-xs font-black text-slate-800 dark:text-white uppercase tracking-widest">Doing</h3>
+                                <p class="text-[9px] text-amber-600 dark:text-amber-400 font-bold uppercase mt-1" id="count-doing">0 Tasks</p>
                             </div>
                             <div class="flex-1 overflow-y-auto no-scrollbar flex flex-col gap-3 pb-6 lg:pb-10" id="col-doing"></div>
                         </div>
 
                         <div class="w-full lg:w-1/4 flex flex-col min-h-[350px] lg:h-full holo-col holo-col-3">
-                            <div class="bg-indigo-900/20 border-t-2 border-indigo-400 rounded-t-2xl p-3 mb-2 text-center backdrop-blur-md sticky top-0 z-20">
-                                <h3 class="text-xs font-black text-white uppercase tracking-widest">Review</h3>
-                                <p class="text-[9px] text-indigo-400 font-bold uppercase mt-1" id="count-review">0 Tasks</p>
+                            <div class="bg-indigo-50 dark:bg-indigo-900/20 border-t-2 border-indigo-400 rounded-t-2xl p-3 mb-2 text-center backdrop-blur-md sticky top-0 z-20 transition-colors">
+                                <h3 class="text-xs font-black text-slate-800 dark:text-white uppercase tracking-widest">Review</h3>
+                                <p class="text-[9px] text-indigo-600 dark:text-indigo-400 font-bold uppercase mt-1" id="count-review">0 Tasks</p>
                             </div>
                             <div class="flex-1 overflow-y-auto no-scrollbar flex flex-col gap-3 pb-6 lg:pb-10" id="col-review"></div>
                         </div>
 
                         <div class="w-full lg:w-1/4 flex flex-col min-h-[350px] lg:h-full holo-col holo-col-4">
-                            <div class="bg-emerald-900/20 border-t-2 border-emerald-400 rounded-t-2xl p-3 mb-2 text-center backdrop-blur-md sticky top-0 z-20">
-                                <h3 class="text-xs font-black text-white uppercase tracking-widest">Done</h3>
-                                <p class="text-[9px] text-emerald-400 font-bold uppercase mt-1" id="count-done">0 Tasks</p>
+                            <div class="bg-emerald-50 dark:bg-emerald-900/20 border-t-2 border-emerald-400 rounded-t-2xl p-3 mb-2 text-center backdrop-blur-md sticky top-0 z-20 transition-colors">
+                                <h3 class="text-xs font-black text-slate-800 dark:text-white uppercase tracking-widest">Done</h3>
+                                <p class="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold uppercase mt-1" id="count-done">0 Tasks</p>
                             </div>
                             <div class="flex-1 overflow-y-auto no-scrollbar flex flex-col gap-3 pb-6 lg:pb-10" id="col-done"></div>
                         </div>
@@ -245,14 +300,25 @@
     <script>
         const API_URL = "/api/get-data";
 
+        // ================= LOGIC THEME =================
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
         // ================= LOGIC CHUYỂN TAB =================
         function switchView(activeView) {
             const tabs = ['WBS', 'TECH', 'CHART'];
             tabs.forEach(tab => {
                 const btn = document.getElementById('tab' + tab);
-                btn.className = "text-zinc-500 hover:text-white pb-3 border-b-[3px] border-transparent transition-all flex-shrink-0";
+                btn.className = "text-slate-400 dark:text-zinc-500 hover:text-slate-800 dark:hover:text-white pb-3 border-b-[3px] border-transparent transition-all flex-shrink-0";
             });
-            document.getElementById('tab' + activeView).className = "text-cyan-400 border-b-[3px] border-cyan-400 pb-3 flex-shrink-0 transition-all";
+            document.getElementById('tab' + activeView).className = "text-cyan-600 dark:text-cyan-400 border-b-[3px] border-cyan-500 dark:border-cyan-400 pb-3 flex-shrink-0 transition-all";
 
             tabs.forEach(tab => {
                 document.getElementById('view' + tab).classList.add('tab-hidden');
@@ -299,7 +365,6 @@
                     });
 
                     normalizedData.forEach(row => {
-                        // Ánh xạ chính xác các trường dữ liệu từ DB
                         const code = row["Mã"] || '-';
                         const taskName = row["Hạng mục"] || 'N/A';
                         const goal = row["Mục tiêu"] || '-';
@@ -311,7 +376,6 @@
                         const roleI = row["I"] || '-';
                         const linkUrl = row["Link Assets"];
 
-                        // Xử lý hiển thị con số Tiến độ
                         let progressNum = 0;
                         if (!isNaN(rawProgress)) { progressNum = parseFloat(rawProgress); } 
                         else if (typeof rawProgress === 'string') { 
@@ -321,51 +385,51 @@
 
                         const hasLink = linkUrl && linkUrl.toString().trim() !== "" && linkUrl.toString().trim() !== "-";
                         const linkBtnDesktop = hasLink 
-                            ? `<a href="${linkUrl}" target="_blank" class="px-3 py-2 bg-blue-500/10 text-blue-400 border border-blue-500/30 rounded-lg hover:bg-blue-500/20 transition-all text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 w-full"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> VIEW</a>` 
-                            : `<span class="text-zinc-600 text-[10px]">-</span>`;
+                            ? `<a href="${linkUrl}" target="_blank" class="px-3 py-2 bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-300 dark:border-blue-500/30 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-500/20 transition-all text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 w-full"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> VIEW</a>` 
+                            : `<span class="text-slate-400 dark:text-zinc-600 text-[10px]">-</span>`;
 
-                        const taskDisplay = `<span class="font-black text-white uppercase tracking-tight">${taskName}</span>`;
+                        const taskDisplay = `<span class="font-black text-slate-800 dark:text-white uppercase tracking-tight">${taskName}</span>`;
 
                         // RENDER BẢNG DESKTOP
                         const tr = document.createElement('tr');
-                        tr.className = "border-b border-white/5 group hover:bg-cyan-500/5 transition-all";
+                        tr.className = "border-b border-slate-200 dark:border-white/5 group hover:bg-cyan-50 dark:hover:bg-cyan-500/5 transition-all";
                         tr.innerHTML = `
-                            <td class="py-6 pr-6 font-mono text-[11px] text-cyan-500 align-middle">${code}</td>
+                            <td class="py-6 pr-6 font-mono text-[11px] text-cyan-600 dark:text-cyan-500 align-middle">${code}</td>
                             <td class="py-6 pr-6 text-[12px] align-middle">${taskDisplay}</td>
-                            <td class="py-6 pr-6 text-[10px] text-zinc-400 leading-relaxed align-middle">${goal}</td>
+                            <td class="py-6 pr-6 text-[10px] text-slate-500 dark:text-zinc-400 leading-relaxed align-middle">${goal}</td>
                             <td class="py-6 pr-6 align-middle">
                                 <div class="flex flex-col gap-2 min-w-[120px]">
                                     <div class="flex justify-between items-center text-[9px] font-black">
-                                        <span class="text-cyan-400">${progressDisplay}%</span>
-                                        <span class="text-zinc-500 uppercase tracking-tighter">${statusBadge}</span>
+                                        <span class="text-cyan-600 dark:text-cyan-400">${progressDisplay}%</span>
+                                        <span class="text-slate-500 dark:text-zinc-500 uppercase tracking-tighter">${statusBadge}</span>
                                     </div>
-                                    <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                                    <div class="w-full h-1 bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden border border-slate-300 dark:border-white/5">
                                         <div class="h-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]" style="width: ${progressDisplay}%"></div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="py-6 text-center text-[10px] font-black text-cyan-400 align-middle">${roleR}</td>
-                            <td class="py-6 text-center text-[10px] font-black text-amber-400 align-middle">${roleA}</td>
-                            <td class="py-6 text-center text-[10px] font-black text-rose-400 align-middle">${roleC}</td>
-                            <td class="py-6 text-center text-[10px] font-black text-emerald-400 align-middle">${roleI}</td>
+                            <td class="py-6 text-center text-[10px] font-black text-cyan-600 dark:text-cyan-400 align-middle">${roleR}</td>
+                            <td class="py-6 text-center text-[10px] font-black text-amber-600 dark:text-amber-400 align-middle">${roleA}</td>
+                            <td class="py-6 text-center text-[10px] font-black text-rose-500 dark:text-rose-400 align-middle">${roleC}</td>
+                            <td class="py-6 text-center text-[10px] font-black text-emerald-600 dark:text-emerald-400 align-middle">${roleI}</td>
                             <td class="py-6 text-center align-middle">${linkBtnDesktop}</td>
                         `;
                         tableBody.appendChild(tr);
 
-                        // Card Mobile (Lược giản để tối ưu không gian)
+                        // Card Mobile
                         mobileContainer.innerHTML += `
-                            <div class="bg-white/[0.02] rounded-[24px] p-5 border border-cyan-900/20 mb-4">
+                            <div class="bg-white dark:bg-white/[0.02] rounded-[24px] p-5 border border-slate-200 dark:border-cyan-900/20 mb-4 shadow-sm">
                                 <div class="flex justify-between items-center mb-3">
-                                    <span class="text-[10px] font-mono text-cyan-400 px-2 py-1 bg-cyan-900/20 rounded border border-cyan-900/30">${code}</span>
-                                    <span class="text-[10px] font-black text-cyan-400">${statusBadge} (${progressDisplay}%)</span>
+                                    <span class="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 px-2 py-1 bg-cyan-50 dark:bg-cyan-900/20 rounded border border-cyan-200 dark:border-cyan-900/30">${code}</span>
+                                    <span class="text-[10px] font-black text-cyan-600 dark:text-cyan-400">${statusBadge} (${progressDisplay}%)</span>
                                 </div>
-                                <div class="text-sm font-black text-white uppercase mb-4 leading-snug">${taskDisplay}</div>
-                                <div class="w-full h-1 bg-white/5 rounded-full mb-4"><div class="h-full bg-cyan-500" style="width: ${progressDisplay}%"></div></div>
+                                <div class="text-sm font-black text-slate-800 dark:text-white uppercase mb-4 leading-snug">${taskDisplay}</div>
+                                <div class="w-full h-1 bg-slate-200 dark:bg-white/5 rounded-full mb-4"><div class="h-full bg-cyan-500" style="width: ${progressDisplay}%"></div></div>
                                 <div class="grid grid-cols-4 gap-2 mb-4 text-[9px] font-black text-center">
-                                    <div class="text-cyan-400">R: ${roleR}</div>
-                                    <div class="text-amber-400">A: ${roleA}</div>
-                                    <div class="text-rose-400">C: ${roleC}</div>
-                                    <div class="text-emerald-400">I: ${roleI}</div>
+                                    <div class="text-cyan-600 dark:text-cyan-400">R: ${roleR}</div>
+                                    <div class="text-amber-600 dark:text-amber-400">A: ${roleA}</div>
+                                    <div class="text-rose-500 dark:text-rose-400">C: ${roleC}</div>
+                                    <div class="text-emerald-600 dark:text-emerald-400">I: ${roleI}</div>
                                 </div>
                                 ${hasLink ? linkBtnDesktop : ''}
                             </div>
@@ -385,11 +449,11 @@
                     result.data.forEach(tech => {
                         let icon = tech["Loại"] === "Mockup" ? "🎨" : tech["Loại"] === "Demo" ? "📱" : "🛠️";
                         container.innerHTML += `
-                            <a href="${tech["Link"]}" target="_blank" class="flex flex-col sm:flex-row sm:items-center gap-4 p-5 sm:p-6 rounded-[24px] bg-white/[0.02] border border-cyan-900/40 hover:border-cyan-500/50 hover:bg-cyan-500/5 transition-all group">
-                                <div class="text-3xl sm:text-4xl group-hover:scale-110 transition bg-black/30 p-3 rounded-2xl w-fit border border-cyan-900/30">${icon}</div>
+                            <a href="${tech["Link"]}" target="_blank" class="flex flex-col sm:flex-row sm:items-center gap-4 p-5 sm:p-6 rounded-[24px] bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-cyan-900/40 hover:border-cyan-300 dark:hover:border-cyan-500/50 hover:bg-cyan-50 dark:hover:bg-cyan-500/5 transition-all group shadow-sm">
+                                <div class="text-3xl sm:text-4xl group-hover:scale-110 transition bg-slate-50 dark:bg-black/30 p-3 rounded-2xl w-fit border border-slate-200 dark:border-cyan-900/30">${icon}</div>
                                 <div class="flex-1">
-                                    <div class="text-sm font-black text-white uppercase tracking-tighter mb-1">${tech["Tên file"] || 'Untitled Document'}</div>
-                                    <div class="text-[9px] sm:text-[10px] text-cyan-500 font-bold uppercase tracking-widest">${tech["Loại"] || 'Tài liệu'} <span class="text-zinc-600 px-2">•</span> <span class="text-zinc-500">${tech["Cập nhật"] || ''}</span></div>
+                                    <div class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tighter mb-1 transition-colors">${tech["Tên file"] || 'Untitled Document'}</div>
+                                    <div class="text-[9px] sm:text-[10px] text-cyan-600 dark:text-cyan-500 font-bold uppercase tracking-widest">${tech["Loại"] || 'Tài liệu'} <span class="text-slate-300 dark:text-zinc-600 px-2">•</span> <span class="text-slate-500 dark:text-zinc-500">${tech["Cập nhật"] || ''}</span></div>
                                 </div>
                             </a>`;
                     });
@@ -397,7 +461,6 @@
             } catch (e) { console.error("Lỗi Tech:", e); }
         }
 
-        // ================= HỆ THỐNG HYBRID (ROADMAP + KANBAN 3D) =================
         let groupedByWeek = {};
 
         async function loadChartData() {
@@ -406,35 +469,23 @@
                 const result = await response.json();
                 if (result.status === "success") {
                     groupedByWeek = {};
-                    
-                    // 1. Phân loại dữ liệu theo Tuần (Roadmap Vĩ mô)
                     result.data.forEach(row => {
                         const weekName = row["Tuan"] || "Tuần Khác";
                         if (!groupedByWeek[weekName]) groupedByWeek[weekName] = [];
                         groupedByWeek[weekName].push(row);
                     });
-
-                    // 2. Vẽ Nút Roadmap
                     const weeks = Object.keys(groupedByWeek).sort();
                     renderRoadmap(weeks);
-                    
-                    // Tự động chọn tuần mới nhất
-                    if (weeks.length > 0) {
-                        selectWeek(weeks[weeks.length - 1]); 
-                    }
+                    if (weeks.length > 0) selectWeek(weeks[weeks.length - 1]); 
                 }
             } catch (e) { console.error("Lỗi Hybrid Core:", e); }
         }
 
-        // Vẽ danh sách nút Roadmap
         function renderRoadmap(weeks) {
             const container = document.getElementById('roadmapContainer');
             container.innerHTML = '';
-
             weeks.forEach(week => {
                 const safeId = week.replace(/[^a-zA-Z0-9]/g, ''); 
-                
-                // Đếm số task và rủi ro trong tuần để báo hiệu trên nút
                 const tasksInWeek = groupedByWeek[week] || [];
                 const risks = tasksInWeek.filter(t => (t["Diem_Nghen"] || "").trim() !== "").length;
                 const riskBadge = risks > 0 ? `<span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse absolute right-3 top-1/2 transform -translate-y-1/2"></span>` : ``;
@@ -442,66 +493,51 @@
                 const btn = document.createElement('button');
                 btn.id = `roadmap-btn-${safeId}`;
                 btn.onclick = () => selectWeek(week, safeId);
-                btn.className = "flex-none w-[130px] lg:w-full p-3 rounded-[16px] border border-white/5 bg-white/[0.02] hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-all text-left flex flex-col gap-1 relative overflow-hidden group";
+                btn.className = "flex-none w-[130px] lg:w-full p-3 rounded-[16px] border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] hover:bg-cyan-50 dark:hover:bg-cyan-500/10 hover:border-cyan-300 dark:hover:border-cyan-500/30 transition-all text-left flex flex-col gap-1 relative overflow-hidden group shadow-sm";
                 
                 btn.innerHTML = `
                     <div class="absolute left-0 top-0 bottom-0 w-1 bg-cyan-500 opacity-20 group-hover:opacity-100 transition-opacity"></div>
-                    <span class="text-[11px] font-black text-white uppercase tracking-wider pl-2 truncate w-full">${week}</span>
-                    <span class="text-[8px] text-zinc-500 font-bold uppercase tracking-widest pl-2 border-t border-white/5 pt-1 mt-1">${tasksInWeek.length} Nhiệm vụ</span>
+                    <span class="text-[11px] font-black text-slate-800 dark:text-white uppercase tracking-wider pl-2 truncate w-full transition-colors">${week}</span>
+                    <span class="text-[8px] text-slate-500 dark:text-zinc-500 font-bold uppercase tracking-widest pl-2 border-t border-slate-100 dark:border-white/5 pt-1 mt-1 transition-colors">${tasksInWeek.length} Nhiệm vụ</span>
                     ${riskBadge}
                 `;
                 container.appendChild(btn);
             });
         }
 
-        // 1. Kích hoạt Tuần -> Chạy logic LŨY KẾ (CARRY-OVER)
         function selectWeek(weekName, safeId = weekName.replace(/[^a-zA-Z0-9]/g, '')) {
             document.getElementById('currentWeekLabel').innerText = weekName;
-
-            // Đổi màu Nút Active
             const allBtns = document.getElementById('roadmapContainer').children;
             for (let btn of allBtns) {
-                btn.classList.remove('bg-cyan-500/10', 'border-cyan-500/40', 'shadow-[0_0_15px_rgba(6,182,212,0.2)]');
-                btn.classList.add('bg-white/[0.02]', 'border-white/5');
+                btn.classList.remove('bg-cyan-50', 'dark:bg-cyan-500/10', 'border-cyan-300', 'dark:border-cyan-500/40', 'shadow-[0_0_15px_rgba(6,182,212,0.2)]');
+                btn.classList.add('bg-white', 'dark:bg-white/[0.02]', 'border-slate-200', 'dark:border-white/5');
             }
             const activeBtn = document.getElementById(`roadmap-btn-${safeId}`);
             if(activeBtn) {
-                activeBtn.classList.remove('bg-white/[0.02]', 'border-white/5');
-                activeBtn.classList.add('bg-cyan-500/10', 'border-cyan-500/40', 'shadow-[0_0_15px_rgba(6,182,212,0.2)]');
+                activeBtn.classList.remove('bg-white', 'dark:bg-white/[0.02]', 'border-slate-200', 'dark:border-white/5');
+                activeBtn.classList.add('bg-cyan-50', 'dark:bg-cyan-500/10', 'border-cyan-300', 'dark:border-cyan-500/40', 'shadow-[0_0_15px_rgba(6,182,212,0.2)]');
             }
 
-            // ================= LOGIC LŨY KẾ =================
             const weeks = Object.keys(groupedByWeek).sort();
             const targetIndex = weeks.indexOf(weekName);
             let accumulatedData = [];
 
-            // Quét từ tuần đầu tiên trong lịch sử cho đến Tuần hiện tại đang chọn
             for (let i = 0; i <= targetIndex; i++) {
                 const currentLoopWeek = weeks[i];
                 const tasksInLoopWeek = groupedByWeek[currentLoopWeek] || [];
-                
                 tasksInLoopWeek.forEach(task => {
                     const status = (task["Trang_Thai"] || "").toUpperCase();
                     const isDone = status.includes("DONE") || status.includes("XONG") || status.includes("HOÀN");
-                    
                     if (i === targetIndex) {
-                        // Tuần hiện tại: Lấy TOÀN BỘ task (cả Done lẫn chưa Done)
                         accumulatedData.push(task);
-                    } else {
-                        // Các tuần trong quá khứ: CHỈ lấy task CHƯA DONE đẩy dồn lên
-                        if (!isDone) {
-                            // Đánh dấu đây là task "Rớt đài" từ tuần cũ để giao diện làm nổi bật
-                            let carriedTask = {...task, isCarriedOver: true, originalWeek: currentLoopWeek};
-                            accumulatedData.push(carriedTask);
-                        }
+                    } else if (!isDone) {
+                        accumulatedData.push({...task, isCarriedOver: true, originalWeek: currentLoopWeek});
                     }
                 });
             }
-
-            renderKanbanBoard(accumulatedData); // Đẩy mảng dữ liệu đã dồn cục sang Kanban
+            renderKanbanBoard(accumulatedData); 
         }
 
-        // 2. Vẽ Kanban Board & Chạy logic ĐẾM NGÀY NGÂM (TASK AGING)
         function renderKanbanBoard(weekData) {
             const colTodo = document.getElementById('col-todo');
             const colDoing = document.getElementById('col-doing');
@@ -521,8 +557,6 @@
                 const status = (row["Trang_Thai"] || "TODO").toUpperCase();
                 const assignee = row["Nguoi_Phu_Trach"] || "--";
                 const bottleneck = row["Diem_Nghen"] || "";
-                
-                // CẬP NHẬT KEY MỚI
                 const dateStr = row["Ngay_Tao"] || ""; 
                 const wbsCode = row["Ma_WBS"] || "";
 
@@ -532,9 +566,8 @@
                 if (isCritical) riskCount++;
 
                 const cardClass = isCritical ? "task-card task-critical" : "task-card";
-                const alertHTML = isCritical ? `<div class="mt-3 p-2 bg-rose-500/10 border border-rose-500/30 rounded-lg text-[9px] font-bold text-rose-400 italic">⚠️ Nút thắt: ${bottleneck}</div>` : '';
+                const alertHTML = isCritical ? `<div class="mt-3 p-2 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/30 rounded-lg text-[9px] font-bold text-rose-500 dark:text-rose-400 italic">⚠️ Nút thắt: ${bottleneck}</div>` : '';
 
-                // TÍNH TOÁN TASK AGING
                 let agingHTML = '';
                 const isDone = status.includes("DONE") || status.includes("XONG") || status.includes("HOÀN") || status.includes("✅");
                 
@@ -550,38 +583,36 @@
                         let diffDays = Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24));
                         
                         if (diffDays > 0) {
-                            let colorClass = diffDays > 7 ? "text-rose-400 bg-rose-400/10 border-rose-500/30" : "text-amber-400 bg-amber-400/10 border-amber-500/30";
+                            let colorClass = diffDays > 7 ? "text-rose-600 dark:text-rose-400 bg-rose-100 dark:bg-rose-400/10 border-rose-300 dark:border-rose-500/30" : "text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-400/10 border-amber-300 dark:border-amber-500/30";
                             let iconPulse = diffDays > 7 ? "animate-pulse" : "";
                             agingHTML = `<div class="mt-2 w-fit px-2 py-1 rounded border text-[8px] font-black uppercase tracking-widest ${colorClass} ${iconPulse}">⏳ Đang ngâm: ${diffDays} ngày</div>`;
                         }
                     }
                 }
 
-                const carriedOverHTML = row.isCarriedOver ? `<span class="ml-2 px-1.5 py-0.5 bg-rose-500/20 text-rose-400 text-[7px] font-black rounded uppercase border border-rose-500/30 whitespace-nowrap">Từ ${row.originalWeek.replace('Tuần', 'T.')}</span>` : '';
+                const carriedOverHTML = row.isCarriedOver ? `<span class="ml-2 px-1.5 py-0.5 bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 text-[7px] font-black rounded uppercase border border-rose-300 dark:border-rose-500/30 whitespace-nowrap">Từ ${row.originalWeek.replace('Tuần', 'T.')}</span>` : '';
                 
-                // HIỂN THỊ MÃ WBS
-                const wbsHTML = wbsCode ? `<span class="text-[8px] font-black px-2 py-0.5 rounded border border-white/10 bg-white/10 text-cyan-400 tracking-widest">#${wbsCode}</span>` : '';
+                const wbsHTML = wbsCode ? `<span class="text-[8px] font-black px-2 py-0.5 rounded border border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/10 text-cyan-600 dark:text-cyan-400 tracking-widest">#${wbsCode}</span>` : '';
 
-                // Prince2 Stage Badge
-                let stageColor = "text-zinc-400 bg-zinc-800/50 border-zinc-700";
-                if(stage.includes("1")) stageColor = "text-cyan-400 bg-cyan-900/30 border-cyan-800/50";
-                if(stage.includes("2")) stageColor = "text-blue-400 bg-blue-900/30 border-blue-800/50";
-                if(stage.includes("3")) stageColor = "text-amber-400 bg-amber-900/30 border-amber-800/50";
-                if(stage.includes("4")) stageColor = "text-emerald-400 bg-emerald-900/30 border-emerald-800/50";
+                let stageColor = "text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-zinc-800/50 border-slate-300 dark:border-zinc-700";
+                if(stage.includes("1")) stageColor = "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/30 border-cyan-300 dark:border-cyan-800/50";
+                if(stage.includes("2")) stageColor = "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-800/50";
+                if(stage.includes("3")) stageColor = "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 border-amber-300 dark:border-amber-800/50";
+                if(stage.includes("4")) stageColor = "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border-emerald-300 dark:border-emerald-800/50";
 
                 const cardHTML = `
                     <div class="${cardClass} rounded-2xl p-4 flex flex-col gap-2 cursor-pointer w-full relative">
                         <div class="flex justify-between items-start gap-2">
-                            <span class="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded border border-white/10 bg-white/5 text-zinc-300 truncate">${project}</span>
+                            <span class="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded border border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-zinc-300 truncate transition-colors">${project}</span>
                             <div class="flex gap-1">${wbsHTML}<span class="text-[8px] font-black px-2 py-0.5 rounded border ${stageColor} tracking-widest truncate">${stage}</span></div>
                         </div>
-                        <h4 class="text-xs font-black text-white leading-snug mt-1">${taskName} ${carriedOverHTML}</h4>
+                        <h4 class="text-xs font-black text-slate-800 dark:text-white leading-snug mt-1 transition-colors">${taskName} ${carriedOverHTML}</h4>
                         ${agingHTML}
                         ${alertHTML}
-                        <div class="flex justify-between items-center mt-2 pt-3 border-t border-white/5">
-                            <div class="flex items-center gap-1.5 bg-black/40 px-2 py-1 rounded-md border border-white/5">
+                        <div class="flex justify-between items-center mt-2 pt-3 border-t border-slate-200 dark:border-white/5 transition-colors">
+                            <div class="flex items-center gap-1.5 bg-slate-50 dark:bg-black/40 px-2 py-1 rounded-md border border-slate-200 dark:border-white/5">
                                 <div class="w-4 h-4 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-[7px] font-black text-white shadow-[0_0_5px_rgba(6,182,212,0.5)]">R</div>
-                                <span class="text-[9px] font-bold text-zinc-400 uppercase truncate max-w-[80px]">${assignee}</span>
+                                <span class="text-[9px] font-bold text-slate-500 dark:text-zinc-400 uppercase truncate max-w-[80px]">${assignee}</span>
                             </div>
                         </div>
                     </div>
@@ -600,7 +631,7 @@
             document.getElementById('totalTasksCount').innerText = totalTasks;
             document.getElementById('riskCount').innerText = riskCount;
         }
-        // KHỞI CHẠY
+        
         window.onload = () => {
             switchView('WBS'); 
             loadAllData();
